@@ -1,0 +1,152 @@
+{
+  "categories": [
+    {
+      "id": "fa9168c3-a7cd-4773-b5a2-9c5d66270af5",
+      "name": "jotter",
+      "shortcuts": [
+        {
+          "acceptCookies": false,
+          "authentication": "basic",
+          "bodyContent": "note={{bfea2e11-e6c9-4bc0-90f5-ca02099a1cd9}}",
+          "description": "Save a note to your personal repository",
+          "iconName": "flat_color_lightbulb_2",
+          "id": "39bccb3a-d5b5-4af7-9199-af9592423b32",
+          "method": "POST",
+          "name": "Add note",
+          "parameters": [
+            {
+              "id": "bc5b4caf-fbd2-49b3-8833-79778cbef299",
+              "key": "content",
+              "value": "{{bfea2e11-e6c9-4bc0-90f5-ca02099a1cd9}}"
+            }
+          ],
+          "requestBodyType": "x_www_form_urlencode",
+          "responseHandling": {
+            "id": "d3a247c8-686b-4d23-aae8-34f935943265",
+            "includeMetaInfo": true,
+            "successMessage": "Note saved.",
+            "successOutput": "message",
+            "uiType": "toast"
+          },
+          "url": "{{dff68a79-8efb-4e40-9360-725676c2dad0}}/api/post.php"
+        },
+        {
+          "acceptCookies": false,
+          "authentication": "basic",
+          "description": "Save one or more files to your personal repository",
+          "iconName": "flat_color_lightbulb",
+          "id": "341d4050-0fe0-4ff4-a8c9-11ed79eccae5",
+          "method": "POST",
+          "name": "Add files",
+          "parameters": [
+            {
+              "id": "1bba4a08-7d53-4d65-be9a-7c6a1cce7bcf",
+              "key": "content",
+              "type": "files"
+            }
+          ],
+          "requestBodyType": "form_data",
+          "responseHandling": {
+            "id": "1534d96a-2bc4-4d43-86fb-0404d37b61a3",
+            "successMessage": "File(s) saved.",
+            "successOutput": "message",
+            "uiType": "toast"
+          },
+          "url": "{{dff68a79-8efb-4e40-9360-725676c2dad0}}/api/post.php"
+        },
+        {
+          "acceptCookies": false,
+          "codeOnPrepare": "let notetype = getVariable(/*[variable]*/\"7c6cffd0-b16d-4f07-a970-3f13b5d6fbcf\"/*[/variable]*/);\nif (notetype == \"text\") {\n  triggerShortcut(/*[shortcut]*/\"39bccb3a-d5b5-4af7-9199-af9592423b32\"/*[/shortcut]*/);\n} else if (notetype == \"files\") {\n  triggerShortcut(/*[shortcut]*/\"341d4050-0fe0-4ff4-a8c9-11ed79eccae5\"/*[/shortcut]*/);\n}",
+          "description": "Save a note or file to your personal repository",
+          "executionType": "scripting",
+          "iconName": "flat_color_shop",
+          "id": "ab48fba9-a86b-470b-9560-a525617c148b",
+          "name": "Add note or file",
+          "url": "http://"
+        },
+        {
+          "acceptCookies": false,
+          "authentication": "basic",
+          "codeOnSuccess": "let notes = JSON.parse(response.body).notes;\nlet selectedNote = showSelection({\n  ...notes.map(note => ({\n    [note.filepath]: \"content\" in note\n      ? note.content\n      : note.originalFilename\n  })).reduce((note1, note2) => ({\n    ...note1, ...note2\n  })),\n  more: \"more...\"\n});\nif (selectedNote == null) {\n  abort();\n} else if (selectedNote != \"more\") {\n  /*\n  showDialog(selectedNote);\n  if (confirm(\"Copy to clipboard?\")) {\n    copyToClipboard(selectedNote);\n    showToast(\"Note copied.\");\n  }\n  */\n  triggerShortcut(\n    selectedNote.endsWith(\".txt\")\n      ? /*[shortcut]*/\"9f2a2a9f-1d49-4e7f-90ba-aacf788c2f93\"/*[/shortcut]*/\n      : /*[shortcut]*/\"4a1ba0ce-c35d-40e5-9349-eae88aca8b95\"/*[/shortcut]*/, {\n    jotter_noteFilepath: selectedNote\n  });\n} else {\n  let count = parseInt(getVariable(/*[variable]*/\"5bcd19ba-47fa-410f-ae8f-8843de4cce73\"/*[/variable]*/)) + 5;\n  triggerShortcut(\"\", {\n    jotter_noteCount: count,\n  });\n}",
+          "description": "Show the most recent notes from your personal repository",
+          "headers": [
+            {
+              "id": "eca006a3-7272-4c9e-ab4a-c20b9eb0db95",
+              "key": "Accept",
+              "value": "application/json"
+            }
+          ],
+          "iconName": "flat_color_clipboard",
+          "id": "4ab9a124-2cda-4322-90ec-0936853cd960",
+          "name": "Latest notes",
+          "responseHandling": {
+            "id": "bdd3f914-627a-400d-ad0a-92aa56fc6901",
+            "includeMetaInfo": true,
+            "successOutput": "none"
+          },
+          "url": "{{dff68a79-8efb-4e40-9360-725676c2dad0}}/?count={{5bcd19ba-47fa-410f-ae8f-8843de4cce73}}"
+        },
+        {
+          "authentication": "basic",
+          "iconName": "flat_color_document",
+          "id": "9f2a2a9f-1d49-4e7f-90ba-aacf788c2f93",
+          "name": "Get specific note",
+          "responseHandling": {
+            "id": "ed7334b3-6d56-40a1-a1e2-cba813b8742a"
+          },
+          "url": "{{dff68a79-8efb-4e40-9360-725676c2dad0}}/{{9d9d8ca2-2a3a-44bd-b612-6fb574ef2a56}}"
+        },
+        {
+          "executionType": "browser",
+          "iconName": "flat_color_memorycard",
+          "id": "4a1ba0ce-c35d-40e5-9349-eae88aca8b95",
+          "name": "Get specific file",
+          "url": "{{dff68a79-8efb-4e40-9360-725676c2dad0}}/{{9d9d8ca2-2a3a-44bd-b612-6fb574ef2a56}}"
+        }
+      ]
+    }
+  ],
+  "variables": [
+    {
+      "id": "dff68a79-8efb-4e40-9360-725676c2dad0",
+      "key": "jotter_server",
+      "value": "https://example.com"
+    },
+    {
+      "flags": 1,
+      "id": "bfea2e11-e6c9-4bc0-90f5-ca02099a1cd9",
+      "key": "jotter_noteContent",
+      "title": "Enter note:",
+      "type": "text"
+    },
+    {
+      "id": "7c6cffd0-b16d-4f07-a970-3f13b5d6fbcf",
+      "key": "jotter_noteType",
+      "options": [
+        {
+          "id": "3c9564f3-8616-477f-bb1e-9b916a913e39",
+          "label": "Text",
+          "value": "text"
+        },
+        {
+          "id": "c0c8d94d-2705-4bcc-9c4a-725a857d469f",
+          "label": "File(s)",
+          "value": "files"
+        }
+      ],
+      "title": "Type of note?",
+      "type": "select",
+      "value": "text"
+    },
+    {
+      "id": "5bcd19ba-47fa-410f-ae8f-8843de4cce73",
+      "key": "jotter_noteCount",
+      "value": "5"
+    },
+    {
+      "id": "9d9d8ca2-2a3a-44bd-b612-6fb574ef2a56",
+      "key": "jotter_noteFilepath"
+    }
+  ],
+  "version": 45
+}
