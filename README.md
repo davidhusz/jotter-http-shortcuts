@@ -13,3 +13,7 @@ from URL` and paste
 https://github.com/davidhusz/jotter-http-shortcuts/raw/main/shortcuts.json.
 After that, you will have to change the value of the `jotter_server` variable to
 the address of your own Jotter instance.
+
+**Note**: If you have existing shortcuts, these will not be lost, however, any
+previous versions of the same Jotter shortcuts (i.e. with the same UUID) will
+be overwritten.
